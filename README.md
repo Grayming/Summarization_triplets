@@ -4,14 +4,16 @@
 ## Methodology
 Step 1: Fine tune a langauge model with "run_lm_finetuning.py".
 
-Step 2: Text processing with "IE.py".
+Step 2: Text processing. See "IE.py".
 
-Step 3: Graph construction: To be done.
+Step 3: Graph construction. See "Graph.py".  Edge connection consider such factors: ADG(Refer to https://homes.cs.washington.edu/~mausam/papers/naacl13.pdf, https://www.aclweb.org/anthology/K17-1045.pdf), similar subject types. Weight is object similarities.
 
-Step 4: Graph custering: To be done (Refer to https://shiruipan.github.io/publication/wang-mgae-2017/wang-mgae-2017.pdf) OR just use the spectural clustering algorithm.
+Step 4: Graph custering with graph_clustering in "Graph.py", use the graclus_cluster algorithm.  (Refer to http://www.cs.utexas.edu/users/inderjit/public_papers/multilevel_pami.pdf).
 
-Step 5: Sentence compression (title generation) within each cluster with "takahe.py".
+Step 5: Sentence compression (title generation) within each cluster. See "takahe.py". (Refer to https://www.aclweb.org/anthology/N13-1030.pdf, https://www.aclweb.org/anthology/C10-1037.pdf)
 
+
+To run the whole framework, 'run_main.py'.
 ## Datasets
 
 Multi-News: https://github.com/Alex-Fabbri/Multi-News
