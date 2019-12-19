@@ -13,7 +13,7 @@ Step 4: Graph custering with graph_clustering in "Graph.py", use the graclus_clu
 Step 5: Sentence compression (title generation) within each cluster. See "takahe.py". (Refer to https://www.aclweb.org/anthology/N13-1030.pdf, https://www.aclweb.org/anthology/C10-1037.pdf)
 
 
-To run the whole framework, 'run_main.py'.
+To run the whole framework, 'run_main.py'. To be done for whole flow.
 ## Datasets
 
 Multi-News: https://github.com/Alex-Fabbri/Multi-News
