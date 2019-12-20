@@ -26,18 +26,22 @@ glove_word_vectors = api.load("glove-wiki-gigaword-100")
 
 def compare_word(word_vectors, w1, w2):
     flag = False
-    nn1 = word_vectors.most_similar(positive = [w1])
-    nn2 = word_vectors.most_similar(positive = [w2])
-    #print(nn1)
-    #print(nn2)
-    for i in nn1:
-        word1 = i[0]
-        for j in nn2:
-            word2 = j[0]
-            if (word1 in word2 or word2 in word1):
-                flag = True
-            else:
-                continue
+    try:
+        nn1 = word_vectors.most_similar(positive = [w1])
+        nn2 = word_vectors.most_similar(positive = [w2])
+        #print(nn1)
+        #print(nn2)
+        for i in nn1:
+            word1 = i[0]
+            for j in nn2:
+                word2 = j[0]
+                if (word1 in word2 or word2 in word1):
+                    flag = True
+                else:
+                    continue
+    except KeyError:
+        pass
+    
     return flag
         
 
