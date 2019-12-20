@@ -1,5 +1,6 @@
 # Unsupervised Multi-document summarization with graph clustering
 
+## Necessary packages under python3: numpy, scipy, torch, torch_cluster, spacy
 
 ## Methodology
 Step 1: Fine tune a langauge model with "run_lm_finetuning.py".
