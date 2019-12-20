@@ -10,7 +10,7 @@ Step 3: Graph construction. See "Graph.py".  Edge connection consider such facto
 
 Step 4: Graph custering with graph_clustering in "Graph.py", use the graclus_cluster algorithm.  (Refer to http://www.cs.utexas.edu/users/inderjit/public_papers/multilevel_pami.pdf).
 
-Step 5: Sentence compression (title generation) within each cluster. See "takahe.py". (Refer to https://www.aclweb.org/anthology/N13-1030.pdf, https://www.aclweb.org/anthology/C10-1037.pdf)
+Step 5: Sentence compression (title generation) within each cluster. See "takahe.py". (Refer to https://www.aclweb.org/anthology/N13-1030.pdf, https://www.aclweb.org/anthology/C10-1037.pdf) This part has not been added to the whole framework. The centroid of each cluster is now used.
 
 
 To run the whole framework, 'run_main.py'. To be done for whole flow.
