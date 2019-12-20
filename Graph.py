@@ -22,7 +22,7 @@ import spacy
 spacynlp = spacy.load("en_core_web_sm")
 import gensim.downloader as api
 
-word_vectors = api.load("glove-wiki-gigaword-100")
+glove_word_vectors = api.load("glove-wiki-gigaword-100")
 
 def compare_word(word_vectors, w1, w2):
     flag = False
@@ -92,6 +92,7 @@ class TripletGraph:
         
         self.w2v = w2v
         
+        
         self.tau = tau
         
     def get_wv_embedding(self, string):
@@ -136,7 +137,7 @@ class TripletGraph:
                     flag=True
                 # ADG
                 if(len(s1_head)>0 and len(s2_head)>0):
-                    flag=compare_string(self.w2v, s1_head, s2_head)
+                    flag=compare_string(glove_word_vectors, s1_head, s2_head)
                 # also add condition: if j-i=1, there are linkage words such as "how"
                 #if (j-i is 1):
                 if(flag and i is not j):
