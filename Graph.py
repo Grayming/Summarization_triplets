@@ -11,7 +11,7 @@ use graph_clustering (Graclus) for graph clustering.
 @author: mingliu
 """
 
-import networkx as nx
+#import networkx as nx
 import numpy as np
 import scipy
 from scipy import *
@@ -84,7 +84,7 @@ def graph_clustering(source, target, weight):
     
 class TripletGraph:
     
-    def __init__(self, triplet_list, lm_model, w2v, tau):
+    def __init__(self, triplet_list, lm_model, w2v, tokenizer, use_lm = True, tau =0.5):
         
         self.triplets = list(triplet_list)
         """ A list of triplets provided by the user. """
@@ -96,6 +96,9 @@ class TripletGraph:
         
         self.w2v = w2v
         
+        self.tokenizer = tokenizer
+        
+        self.use_lm = use_lm
         
         self.tau = tau
         
@@ -105,14 +108,24 @@ class TripletGraph:
         #print(sent)
         if len(sent) != 0:
             vectors = [word_embeddings.get(w, np.zeros((100,))) for w in sent.split()]
-            v=np.mean(vectors, axis=0)
+            v=np.mean(vectors, axis=1)
         else:
             v = np.zeros((100,))
         return v
     
     def get_lm_embedding(self, string):
-        sent=string.lower().split()    
         
+        sent=string.lower()
+        if len(sent)!= 0:
+            input_ids = torch.tensor([self.tokenizer.encode(sent)])
+            #last_hidden_state, presents,all_hidden_states, all_attentions = model(input_ids)
+            last_hidden_state = self.lm_model(input_ids)[0]
+
+            hidden_state=last_hidden_state.tolist()
+            v = np.mean(hidden_state,axis=1)
+        else:
+            v = np.zeros((768,))
+        return v
         
     def build_triplet_graph(self):
         '''
@@ -125,15 +138,21 @@ class TripletGraph:
         weight=[]
         for i in range(self.length):
             s1_head = self.triplets[i][0]
+            if self.use_lm:
+                s1_head_emb = self.get_lm_embedding(s1_head)
+                s1_tail_emb = self.get_lm_embedding(self.triplets[i][2])
+            else:
+                s1_head_emb = self.get_wv_embedding(s1_head)
+                s1_tail_emb = self.get_wv_embedding(self.triplets[i][2])
             
-            s1_head_emb = self.get_wv_embedding(s1_head)
-            
-            s1_tail_emb = self.get_wv_embedding(self.triplets[i][2])
             for j in range(self.length):
                 s2_head = self.triplets[j][0]
-                s2_head_emb = self.get_wv_embedding(s2_head)
-                
-                s2_tail_emb = self.get_wv_embedding(self.triplets[j][2])
+                if self.use_lm:
+                    s2_head_emb = self.get_lm_embedding(s2_head)
+                    s2_tail_emb = self.get_lm_embedding(self.triplets[j][2])
+                else:
+                    s2_head_emb = self.get_wv_embedding(s2_head)
+                    s2_tail_emb = self.get_wv_embedding(self.triplets[j][2])
                 
                 flag=False
                 # compare head embedding similarity
