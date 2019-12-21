@@ -3,6 +3,19 @@
 
 import takahe
 
+def get_compressed_sen(sentences):
+    compresser = takahe.word_graph( sentences, 
+							    nb_words = 6, 
+	                            lang = 'en', 
+	                            punct_tag = "PUNCT" )
+    candidates = compresser.get_compression(3)
+    reranker = takahe.keyphrase_reranker(sentences,  
+									  candidates, 
+									  lang = 'en')
+
+    reranked_candidates = reranker.rerank_nbest_compressions()
+    score, path = reranked_candidates[0]
+    return ' '.join([u[0] for u in path])
 
 ################################################################################
 sentences = ["The/DT wife/NN of/IN a/DT former/JJ U.S./NNP president/NN \
@@ -25,7 +38,7 @@ compresser = takahe.word_graph( sentences,
 	                            punct_tag = "PUNCT" )
 
 # Get the 50 best paths
-candidates = compresser.get_compression(50)
+candidates = compresser.get_compression(3)
 
 # 1. Rerank compressions by path length (Filippova's method)
 for cummulative_score, path in candidates:
@@ -40,9 +53,9 @@ for cummulative_score, path in candidates:
 compresser.write_into_dot('test.dot')
 
 # 2. Rerank compressions by keyphrases (Boudin and Morin's method)
-reranker = takahe.keyphrase_reranker( sentences,  
+reranker = takahe.keyphrase_reranker(sentences,  
 									  candidates, 
-									  lang = 'en' )
+									  lang = 'en')
 
 reranked_candidates = reranker.rerank_nbest_compressions()
 
@@ -53,6 +66,11 @@ for score, path in reranked_candidates:
 	print(round(score, 3), ' '.join([u[0] for u in path]))
     
     
+print(reranked_candidates[0])
+    
+    
+haha = get_compressed_sen(sentences)
+print(haha)    
     
     
     
