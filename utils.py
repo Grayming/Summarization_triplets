@@ -9,6 +9,7 @@ Created on Wed Dec 18 15:10:34 2019
 import numpy as np
 import os
 import spacy
+import takahe
 
 spacynlp = spacy.load("en_core_web_sm")
 
@@ -36,14 +37,45 @@ def read_triplets(path, file_name):
     return tri_list
 
 
-def slash_pos(str_text):
+def tag_pos(str_text):
     doc=spacynlp(str_text)
     textlist=[]
     # compare the words between two strings
-    for item in doc1:
+    for item in doc:
         source_token = item.text
-        source_pos = item.pos_
+        source_pos = item.tag_
         textlist.append(source_token+'/'+source_pos)
     return ' '.join(textlist)
-    
-    
+
+def convert_triplet_to_sents(tri_list):
+    tagged_list = []
+    if(len(tri_list)>0):
+        for item in tri_list:
+            temp = ' '.join(item)
+            temp = temp + '.'
+            temp_tagged = tag_pos(temp)
+            tagged_list.append(temp_tagged)
+    else:
+        tagged_list.append(tag_pos('.'))
+    return tagged_list
+        
+def get_compressed_sen(sentences):
+    compresser = takahe.word_graph(sentences, 
+							    nb_words = 8, 
+	                            lang = 'en', 
+	                            punct_tag = "." )
+    candidates = compresser.get_compression(3)
+    reranker = takahe.keyphrase_reranker(sentences,  
+									  candidates, 
+									  lang = 'en')
+
+    reranked_candidates = reranker.rerank_nbest_compressions()
+    #print(reranked_candidates)
+    if(len(reranked_candidates)>0):
+        score, path = reranked_candidates[0]
+        result = ' '.join([u[0] for u in path])
+    else:
+        result=' '
+    return result
+
+   

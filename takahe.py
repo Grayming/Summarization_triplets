@@ -225,11 +225,13 @@ class word_graph:
                 pos_separator_re = re.escape(self.pos_separator)
                 m = re.match("^(.+)" +pos_separator_re +"(.+)$", w)
                 
-                # Extract the word information
-                token, POS = m.group(1), m.group(2)
+                if m is not None:
+                    
+                    # Extract the word information
+                    token, POS = m.group(1), m.group(2)
 
-                # Add the token/POS to the sentence container
-                container.append((token.lower(), POS))
+                    # Add the token/POS to the sentence container
+                    container.append((token.lower(), POS))
                     
             # Add the stop token at the end of the container
             container.append((self.stop, self.stop))
@@ -1446,9 +1448,13 @@ class keyphrase_reranker:
         # Splitting word, POS using regex
         pos_separator_re = re.escape(self.pos_separator)
         m = re.match("^(.+)"+ pos_separator_re +"(.+)$", word)
-
-        # Extract the word information
-        token, POS = m.group(1), m.group(2)
+        
+        if m is not None:
+            # Extract the word information
+            token, POS = m.group(1), m.group(2)
+        else:
+            token = 'the'
+            POS = 'DT'
 
         # Return the tuple 
         return (token.lower(), POS)
