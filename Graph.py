@@ -108,7 +108,7 @@ class TripletGraph:
         #print(sent)
         if len(sent) != 0:
             vectors = [word_embeddings.get(w, np.zeros((100,))) for w in sent.split()]
-            v=np.mean(vectors, axis=1)
+            v=np.mean(vectors, axis=0)
         else:
             v = np.zeros((100,))
         return v

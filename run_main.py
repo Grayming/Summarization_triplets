@@ -131,7 +131,7 @@ if __name__ == "__main__":
         for k,v in text_dict.items():
             if(len(v)>0):
                 sents = convert_triplet_to_sents(v)
-                print(sents)
+                #print(sents)
                 compressed_sent = get_compressed_sen(sents)
                 summary.append(compressed_sent)
         print(' '.join(summary))
@@ -145,9 +145,9 @@ if __name__ == "__main__":
         
     
     outfile='summary_predict.txt'
-    f = open(outfile, "a")
-    f.writelines(summary_list)
-    f.close()
+    with open(outfile, 'w') as f:
+        for item in summary_list:
+            f.write("%s\n" % item)
     print('Done')
     
     
